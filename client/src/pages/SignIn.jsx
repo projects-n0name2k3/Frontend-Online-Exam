@@ -1,5 +1,4 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { icons, images } from "@/constants";
 import { Mail } from "lucide-react";
 import React from "react";
 
@@ -40,7 +39,9 @@ function SignIn() {
                 />
 
                 <img
-                  src={icons.lock}
+                  src={
+                    "https://res.cloudinary.com/dnqfjopsy/image/upload/v1726116168/rbmfko3zka6vkrkatbsq.png"
+                  }
                   className="w-5 h-w-5 text-[#686B6E] absolute top-4 ml-4"
                 />
               </div>
@@ -79,7 +80,9 @@ function SignIn() {
       </div>
       <div className="col-span-1 relative">
         <img
-          src={images.Illustration}
+          src={
+            "https://res.cloudinary.com/dnqfjopsy/image/upload/v1726116482/mx8adrhrmcwdxjcs0hho.png"
+          }
           alt=""
           className="w-[1000px] object-cover absolute z-0"
         />

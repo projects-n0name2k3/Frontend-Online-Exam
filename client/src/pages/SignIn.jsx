@@ -64,7 +64,7 @@ function SignIn() {
                 Forgot Password?
               </span>
             </div>
-            <button className="w-full bg-[#B6F09C] px-2 py-6 rounded-lg font-semibold text-base leading-6 tracking-[0.15px]">
+            <button className="w-full bg-[#B6F09C] py-2 px-6 rounded-lg font-semibold text-base leading-6 tracking-[0.15px]">
               Log in
             </button>
             <div className="flex items-center justify-center gap-2">

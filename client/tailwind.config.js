@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ["class"],
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,jsx}", "./src/components/**/*.{js,jsx}"],
   theme: {
     extend: {
       borderRadius: {
@@ -52,7 +52,7 @@ export default {
         },
       },
       fontFamily: {
-        jakata: ["Plus Jakarta Sans", "sans-serif"],
+        primary: ["Montserrat", "sans-serif"],
       },
     },
   },

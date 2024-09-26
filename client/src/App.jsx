@@ -1,14 +1,19 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import SignIn from "./pages/SignIn";
-import Dashboard from "./pages/Dashboard";
+import AdminLayout from "./components/admin-view/layout";
+import Products from "./pages/admin/products";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/sign-in" element={<SignIn />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-    </Routes>
+    <div className="flex flex-col overflow-hidden bg-white">
+      <Routes>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="products" element={<Products />} />
+        </Route>
+
+        <Route path="*" element={<Products />} />
+      </Routes>
+    </div>
   );
 }
 

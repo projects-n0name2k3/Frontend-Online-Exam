@@ -134,7 +134,7 @@ function Products() {
       (product) => product.title === formData.title
     );
 
-    if (formData.price < formData.salePrice) {
+    if (formData.price <= formData.salePrice) {
       toast({
         title: "Sale Price should be less than Price",
         variant: "destructive",

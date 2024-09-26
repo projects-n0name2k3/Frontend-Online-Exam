@@ -133,6 +133,15 @@ function Products() {
     const existedProduct = products.find(
       (product) => product.title === formData.title
     );
+
+    if (formData.price < formData.salePrice) {
+      toast({
+        title: "Sale Price should be less than Price",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     if (existedProduct) {
       toast({
         title: "Product already exists",

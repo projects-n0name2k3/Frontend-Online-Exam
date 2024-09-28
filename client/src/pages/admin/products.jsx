@@ -14,6 +14,14 @@ import React, { useState } from "react";
 
 import ProductTile from "./product-tile";
 
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { app } from "@/config/firebase";
+
 const initialFormData = {
   image: null,
   title: "",
@@ -76,9 +84,46 @@ function Products() {
   const [formData, setFormData] = useState(initialFormData);
   const [imageFile, setImageFile] = useState(null);
   const [imageLoadingState, setImageLoadingState] = useState(false);
-  const [products, setProducts] = useState(initialProductList);
+  const [products, setProducts] = useState(() => {
+    const storedProducts = localStorage.getItem("products");
+    return storedProducts ? JSON.parse(storedProducts) : initialProductList;
+  });
+  const [isUploading, setIsUploading] = useState(false);
 
-  const onSubmit = (e) => {
+  const handleUploadFile = async (file) => {
+    return new Promise((resolve, reject) => {
+      setIsUploading(true);
+      const storage = getStorage(app);
+
+      const fileName = new Date().getTime() + file.name;
+
+      const storageRef = ref(storage, fileName);
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+
+        (error) => {
+          reject(error);
+        },
+
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setIsUploading(false);
+            resolve(downloadURL); // Resolve the promise with the downloadURL
+          });
+        }
+      );
+    });
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     if (!imageFile) {
@@ -129,10 +174,6 @@ function Products() {
       });
       return;
     }
-    //check if existed product'name
-    const existedProduct = products.find(
-      (product) => product.title === formData.title
-    );
 
     if (formData.price <= formData.salePrice) {
       toast({
@@ -141,7 +182,11 @@ function Products() {
       });
       return;
     }
-    
+
+    //check if existed product'name
+    const existedProduct = products.find(
+      (product) => product.title === formData.title
+    );
     if (existedProduct) {
       toast({
         title: "Product already exists",
@@ -149,6 +194,14 @@ function Products() {
       });
       return;
     }
+    const newProduct = {
+      ...formData,
+      image: await handleUploadFile(imageFile),
+      id: new Date().getTime().toString(),
+    };
+    const updatedProduct = [...products, newProduct];
+    setProducts(updatedProduct);
+    localStorage.setItem("products", JSON.stringify(updatedProduct));
     setImageFile(null);
     setFormData(initialFormData);
     toast({
@@ -201,6 +254,7 @@ function Products() {
               onSubmit={onSubmit}
               formData={formData}
               setFormData={setFormData}
+              isUploading={isUploading}
               buttonText={"Add"}
               formControls={addProductFormElements}
             />
